@@ -1,0 +1,6 @@
+scenario,grid,deliveries,battery,total_mission_cost,deliveries_completed,avg_delivery_time,path_optimality_gap_pct,computation_time_ms,battery_violations,recharges,astar_nodes_expanded,ucs_nodes_expanded,nn_tour_cost,nn2opt_tour_cost,optimal_tour_cost,nn_gap_pct,nn2opt_gap_pct
+small_calm,8x8,2,80,34,2,23.0,0.0,1.57,0,0,138,362,36,34,34,5.88,0.0
+medium_windy,14x14,3,200,74,3,38.33,0.0,6.37,0,0,524,1419,74,74,70,5.71,5.71
+multi_delivery,16x16,4,300,86,4,50.5,0.0,11.66,0,0,784,2067,98,86,86,13.95,0.0
+wind_detour,9x9,1,100,20,1,19.0,0.0,0.38,0,0,51,199,20,20,20,0.0,0.0
+recharge_demo,12x12,3,44,62,3,41.0,0.0,4.74,0,1,372,1028,56,56,56,0.0,0.0
