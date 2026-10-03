@@ -1,4 +1,4 @@
-# scenarios.py
+
 # The maps the project is run on. Used by main.py and experiments.py.
 from dataclasses import dataclass
 
