@@ -1,6 +1,3 @@
-# astar.py
-# A* search. Same idea as UCS, but nodes are ranked by g + h where
-# g = cost so far and h = Manhattan distance to the goal.
 import heapq
 import time
 
@@ -10,7 +7,7 @@ from cost_model import move_cost, manhattan, PathResult
 def astar(env, start, goal):
     t0 = time.perf_counter()
     tie = 0
-    frontier = [(manhattan(start, goal), tie, 0, start)]    # (f, tie, g, cell)
+    frontier = [(manhattan(start, goal), tie, 0, start)]    
     best_g = {start: 0}
     parent = {start: None}
     done = set()

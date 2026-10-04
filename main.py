@@ -1,14 +1,3 @@
-# main.py
-# Runs scenarios directly in the terminal and prints the ASCII map,
-# tour sequence comparison, step-by-step mission log, and performance metrics.
-#
-# Usage:
-#   python main.py                              (runs default: recharge_demo)
-#   python main.py medium_windy nn2opt          (runs specific scenario and method)
-#   python main.py all                          (runs all scenarios & prints summary table)
-#
-# Scenarios: small_calm, medium_windy, multi_delivery, wind_detour, recharge_demo
-# Methods:   nn, nn2opt, optimal
 import sys
 
 from scenarios import small_calm, medium_windy, multi_delivery, wind_detour, recharge_demo

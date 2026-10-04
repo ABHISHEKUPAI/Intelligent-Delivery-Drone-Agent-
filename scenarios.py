@@ -1,5 +1,3 @@
-
-# The maps the project is run on. Used by main.py and experiments.py.
 from dataclasses import dataclass
 
 from environment import GridEnvironment
@@ -15,7 +13,7 @@ class Scenario:
 
 
 def small_calm():
-    # 1. small grid, hardly any wind
+
     env = GridEnvironment(
         rows=8, cols=8, depot=(0, 0),
         no_fly={(2, 2), (2, 3), (3, 2), (5, 5), (5, 6)},
@@ -27,7 +25,6 @@ def small_calm():
 
 
 def medium_windy():
-    # 2. medium grid, a wall, a strong crosswind band and a northward wind patch
     no_fly = {(r, 6) for r in range(2, 10)} | {(10, 10), (10, 11), (11, 10), (11, 11)}
     wind = {(5, c): ("W", 3) for c in range(0, 14) if (5, c) not in no_fly}
     wind.update({(r, c): ("N", 4) for r in (8, 9) for c in range(8, 12)})
@@ -40,7 +37,6 @@ def medium_windy():
 
 
 def multi_delivery():
-    # 3. four deliveries on a bigger map (still small enough to brute force)
     no_fly = ({(r, 5) for r in range(0, 7)} | {(r, 10) for r in range(8, 16)}
               | {(8, 2), (8, 3), (8, 4), (12, 7), (12, 8)})
     wind = {(r, c): ("E", 2) for r in (3, 4) for c in range(6, 14)}
@@ -54,8 +50,6 @@ def multi_delivery():
 
 
 def wind_detour(wind_on=True):
-    # 4. a headwind band across the middle. Flying east the drone goes around it,
-    #    flying west the same wind is a tailwind so the drone rides through it.
     wind = {}
     if wind_on:
         wind = {(r, c): ("W", 5) for r in (3, 4, 5) for c in range(2, 7)}
@@ -68,7 +62,6 @@ def wind_detour(wind_on=True):
 
 
 def recharge_demo():
-    # 5. three far-apart deliveries and a small battery, so the drone has to recharge
     no_fly = {(r, 6) for r in range(3, 11)} | {(3, 7), (3, 8)}
     wind = {(r, c): ("N", 3) for r in range(6, 9) for c in range(0, 5)}
     env = GridEnvironment(
