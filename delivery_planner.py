@@ -1,12 +1,3 @@
-# delivery_planner.py
-# Decides the ORDER of stops (pickups and drop-offs). A* then finds the actual
-# path between two stops.
-#
-# Three ways to get an order:
-#   "nn"      nearest neighbour: always go to the closest stop that is allowed next
-#   "nn2opt"  nearest neighbour, then 2-opt tries to clean it up
-#   "optimal" brute force over every valid order (only OK for a few deliveries)
-# The brute force one is there so we can say how close the heuristics get.
 import time
 from dataclasses import dataclass, field
 
@@ -19,7 +10,7 @@ MAX_BRUTE_FORCE_DELIVERIES = 5
 @dataclass(frozen=True)
 class Stop:
     delivery: str
-    kind: str          # "pickup" or "drop"
+    kind: str          
     cell: tuple
 
     @property
@@ -36,7 +27,6 @@ def make_stops(env):
 
 
 class CostTable:
-    # remembers the A* cost between two cells so we don't search the same thing twice
     def __init__(self, env):
         self.env = env
         self.cache = {}
@@ -53,7 +43,6 @@ class CostTable:
 
 
 def is_valid_order(order):
-    # a drop-off is only allowed after the pickup of the same delivery
     picked_up = set()
     for stop in order:
         if stop.kind == "pickup":
@@ -64,7 +53,6 @@ def is_valid_order(order):
 
 
 def tour_cost(order, depot, table):
-    # depot -> every stop in order -> back to the depot
     total = 0
     here = depot
     for stop in order:
@@ -79,7 +67,6 @@ def nearest_neighbor(stops, depot, table):
     order = []
     here = depot
     while remaining:
-        # a drop-off only becomes an option once its package is on board
         options = [s for s in remaining if s.kind == "pickup" or s.delivery in picked_up]
         nxt = min(options, key=lambda s: table.cost(here, s.cell))
         order.append(nxt)
@@ -91,8 +78,6 @@ def nearest_neighbor(stops, depot, table):
 
 
 def two_opt(order, depot, table):
-    # Try reversing a chunk of the route. Keep the change only if the route is
-    # still valid AND cheaper. Repeat until nothing improves.
     stats = {"accepted": 0, "rejected_precedence": 0, "rejected_no_gain": 0}
     best = list(order)
     best_cost = tour_cost(best, depot, table)
@@ -118,7 +103,6 @@ def two_opt(order, depot, table):
 
 
 def brute_force_best(stops, depot, table):
-    # tries every order where each pickup comes before its drop-off
     if len(stops) // 2 > MAX_BRUTE_FORCE_DELIVERIES:
         raise ValueError("too many deliveries for brute force")
     best = {"order": None, "cost": INF}
@@ -176,7 +160,6 @@ def plan_tour(env, method="nn2opt", table=None):
 
 
 def compare_tours(env):
-    # NN vs NN+2-opt vs the true best order, with a % gap from the best
     table = CostTable(env)
     plans = {m: plan_tour(env, m, table) for m in ("nn", "nn2opt", "optimal")}
     best = plans["optimal"].cost

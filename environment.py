@@ -1,7 +1,3 @@
-# environment.py
-# The grid world the drone flies in. Cells are (row, col), row 0 is the top.
-
-# direction letter -> (change in row, change in col)
 DIRECTIONS = {"N": (-1, 0), "S": (1, 0), "E": (0, 1), "W": (0, -1)}
 OPPOSITE = {"N": "S", "S": "N", "E": "W", "W": "E"}
 
@@ -9,11 +5,6 @@ OPPOSITE = {"N": "S", "S": "N", "E": "W", "W": "E"}
 class GridEnvironment:
     def __init__(self, rows, cols, depot, no_fly=None, wind=None,
                  pickups=None, dropoffs=None):
-        # depot    : (row, col) where the drone starts and recharges
-        # no_fly   : set of cells the drone can never enter
-        # wind     : {(row, col): (direction, strength)}  e.g. {(2, 3): ("W", 4)}
-        # pickups  : {"A": (row, col), ...}
-        # dropoffs : {"A": (row, col), ...}  same names as pickups
         self.rows = rows
         self.cols = cols
         self.depot = depot
@@ -34,7 +25,6 @@ class GridEnvironment:
         return self.in_bounds(cell) and not self.is_blocked(cell)
 
     def neighbors(self, cell):
-        # the four moves (up/down/left/right) that stay on the map and avoid no-fly cells
         r, c = cell
         for name, (dr, dc) in DIRECTIONS.items():
             nxt = (r + dr, c + dc)
@@ -42,7 +32,7 @@ class GridEnvironment:
                 yield name, nxt
 
     def _check_setup(self):
-        # catch silly mistakes early (like a pickup placed inside a no-fly zone)
+
         places = [("depot", self.depot)]
         places += [("pickup " + k, v) for k, v in self.pickups.items()]
         places += [("dropoff " + k, v) for k, v in self.dropoffs.items()]
@@ -58,7 +48,6 @@ class GridEnvironment:
                 raise ValueError(f"wind at {cell} is off the map or inside a no-fly zone")
 
     def render(self, path=None):
-        # quick text picture of the map, useful for debugging and the README
         arrows = {"N": "^", "S": "v", "E": ">", "W": "<"}
         on_path = set(path or [])
         pick = {v: k for k, v in self.pickups.items()}

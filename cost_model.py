@@ -1,15 +1,3 @@
-# cost_model.py
-# One cost function, shared by A* and UCS so the comparison is fair.
-#
-# Cost of stepping INTO a cell:
-#   normal cell                       -> 1
-#   wind cell, flying with the wind   -> 1   (no discount, so a step never costs less than 1)
-#   wind cell, flying across the wind -> 1 + strength // 2
-#   wind cell, flying against it      -> 1 + strength
-# No-fly cells can't be entered at all.
-#
-# Since every step costs at least 1, Manhattan distance can never overestimate
-# the real remaining cost. That is what makes it a safe (admissible) heuristic for A*.
 from dataclasses import dataclass
 from typing import List, Tuple, Optional
 
@@ -24,11 +12,11 @@ def move_cost(env, direction, next_cell):
     if next_cell not in env.wind:
         return MIN_STEP_COST
     wind_dir, strength = env.wind[next_cell]
-    if direction == wind_dir:                    # tailwind
+    if direction == wind_dir:                    
         return MIN_STEP_COST
-    if direction == OPPOSITE[wind_dir]:          # headwind
+    if direction == OPPOSITE[wind_dir]:          
         return MIN_STEP_COST + strength
-    return MIN_STEP_COST + strength // 2         # crosswind
+    return MIN_STEP_COST + strength // 2        
 
 
 def manhattan(a, b):
@@ -39,7 +27,6 @@ _STEP_TO_DIRECTION = {(-1, 0): "N", (1, 0): "S", (0, 1): "E", (0, -1): "W"}
 
 
 def path_cost(env, path):
-    # add up the cost of a path again from scratch, handy for double-checking a search result
     total = 0
     for a, b in zip(path, path[1:]):
         step = (b[0] - a[0], b[1] - a[1])
@@ -49,11 +36,11 @@ def path_cost(env, path):
 
 @dataclass
 class PathResult:
-    # what A* and UCS both hand back
-    path: Optional[List[Tuple[int, int]]]   # None means no route exists
+
+    path: Optional[List[Tuple[int, int]]]   
     cost: Optional[int]
-    time_s: float                           # how long the search took
-    nodes_expanded: int                     # extra number we use to compare A* and UCS
+    time_s: float                           
+    nodes_expanded: int                     
 
     @property
     def found(self):
